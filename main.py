@@ -1,5 +1,6 @@
 import argparse
 
+
 parser = argparse.ArgumentParser()
 
 parser.add_argument("--filename", "-f", required=True)
@@ -14,44 +15,6 @@ parser.add_argument("--overall", nargs='+', required=False)
 parser.add_argument("--interactive", action="store_true", required=False)
 
 args = parser.parse_args()
-
-
-def ten_medalists(medals, output, filename, country, year, noc, sport):
-    gold_medal = 0
-    silver_medal = 0
-    bronze_medal = 0
-    total = 0
-    list_medals = ["Gold", "Silver", "Bronze"]
-    counter = 0
-    output_file = None
-    indx = 0
-    print(gold_medal, silver_medal, bronze_medal)
-    if output is not None:
-        output_file = open(output, "wt")
-    with open(filename, "r") as file:
-        for line in file:
-            element = line.strip().split("\t")
-            if element[6] == country or element[7] == noc and element[9] == year and element[12] == sport and element[
-                14] in list_medals:
-                medalist = [element[1], element[12], element[14]]
-                counter += 1
-                total += 1
-                if element[14] == list_medals[0]:
-                    gold_medal += 1
-                if element[14] == list_medals[1]:
-                    silver_medal += 1
-                if element[14] == list_medals[2]:
-                    bronze_medal += 1
-                if counter <= 10:
-                    first_medalists = ", ".join(medalist)
-                    print(f"{first_medalists}")
-                    print(gold_medal, silver_medal, bronze_medal)
-                    print(gold_medal + silver_medal + bronze_medal)
-    if output_file is not None:
-        indx += 1
-        output_file.write(str(indx) + ",".join(element) + "\n")
-    if output_file is not None:
-        output_file.close()
 
 
 def transform_line(line: str):
@@ -85,6 +48,52 @@ def total(year):
             print(i)
 
 
+def ten_medalists(output, filename, country, year, noc, sport):
+    gold_medal = 0
+    silver_medal = 0
+    bronze_medal = 0
+    total = 0
+    list_medals = ["Gold", "Silver", "Bronze"]
+    counter = 0
+    output_file = None
+    indx = 0
+    idx = 0
+    names_sport_medal = []
+    print(gold_medal, silver_medal, bronze_medal)
+    with open(filename, "r") as file:
+        for line in file:
+            element = line.strip().split("\t")
+            if element[6] == country or element[7] == noc and element[9] == year and element[12] == sport and element[14] in list_medals:
+                element = line.strip().split("\t") # strip - забирає пробіли
+            if element[6] == country or element[7] == country and element[9] == year and element[14] in list_medals:
+                medalist = [element[1], element[12], element[14]]
+                counter += 1
+                total += 1
+                if element[14] == list_medals[0]:
+                    gold_medal += 1
+                if element[14] == list_medals[1]:
+                    silver_medal += 1
+                if element[14] == list_medals[2]:
+                    bronze_medal += 1
+                if counter <= 10:
+                    first_medalists = ", ".join(medalist)
+                    print(f"{first_medalists}")
+                    names_sport_medal.append(first_medalists)
+                    print(gold_medal, silver_medal, bronze_medal)
+                    print(gold_medal + silver_medal + bronze_medal)
+    if output_file is not None:
+        indx += 1
+        output_file.write(str(indx) + ",".join(element) + "\n")
+    if output_file is not None:
+        output_file.close()
+    if output is not None:
+        with open(output, "w+") as output_file:
+            idx += 1
+            for lline in names_sport_medal:
+                lline.split("\t")
+                output_file.write(lline)
+
+
 def overall(filename, overall):
     dictionary = {}
     best_years = []
@@ -113,10 +122,6 @@ def overall(filename, overall):
             file = open(file_name, 'w')
             file.write("\n".join(best_years))
             file.close()
-
-
-# def toFixed(num2bj, digits=2):
-#     return f"{num2bj:.{digits}f}"
 
 
 def interactive(filename):
