@@ -4,7 +4,7 @@ import argparse
 
 
 def transform_line(line: str):
-    # remove unnecessary symbol at the end and convert str to list
+    # забирає непотрібний символ вкінці і конвертує str to list
     return line.strip('\n').split('\t')
 
 
@@ -118,7 +118,15 @@ if __name__ == '__main__':
     main()
 
 
-
+# fruits = ["apple", "banana", "orange", "pine", "berry"]
+# result = []
+# for fruit in fruits:
+#     if "a" in fruit:
+#         result.append(fruit)
+#
+# # list comprehension
+# comprehensed = [x.upper() for x in fruits if "a" in x] # для кожного x вcередині списку фрутс, де є "а", я покладу x у верхній регістр
+# print(comprehensed)
 
 
 
